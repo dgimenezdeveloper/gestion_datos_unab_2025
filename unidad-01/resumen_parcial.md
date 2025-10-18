@@ -349,8 +349,46 @@ Este resumen te ayuda a enfocar el estudio en los conceptos clave de SI, BD y SG
   - Físico: scripts para validar la decisión.
 - Mantener el foco en el alcance definido y evitar inflar el modelo con entidades innecesarias.
 
+# Ciclo de Diseño de Bases de Datos
 
+```mermaid
 
+    A[Análisis de Requerimientos] --> B[Diseño Conceptual]
+    B --> C[Diseño Lógico]
+    C --> D[Diseño Físico]
+    D --> E[Implementación y Pruebas]
+```
 
+- **Análisis de Requerimientos:** Definir el alcance, identificar requerimientos y reglas de negocio, y decidir sobre atributos multivaluados.
+- **Diseño Conceptual:** Crear el Diagrama Entidad-Relación (DER) con entidades y atributos.
+  - Tipos de atributos: 
+    - **Simples** -> Son indivisibles y almacenan un solo valor.
+    - **Multivaluados** -> Pueden almacenar múltiples valores por entidad.
+    - **Derivados** -> Se calculan a partir de otros atributos.
+    - **Compuestos** -> Se componen de múltiples subatributos.
+    - **Clave Candidata** -> Atributo o conjunto de atributos que puede identificar de manera única una entidad.
+    ![alt text](image.png)
+    ![alt text](image-2.png)
+- **Diseño Lógico:** Traducir el DER a un esquema relacional con tablas y claves.
+    - Definir tablas, claves primarias (PK), claves foráneas (FK) y dominios de atributos (Son los tipos de datos permitidos para cada atributo, por ejemplo, VARCHAR, INT, DATE, etc).
+    - Establecer relaciones entre tablas mediante FK.
+    - ![alt text](image-1.png)
+  
+- **Diseño Físico:** Especificar cómo se almacenarán los datos y generar scripts SQL.
+    - Crear scripts de `CREATE TABLE` con definiciones de columnas, tipos de datos y restricciones (PK, FK, UNIQUE, CHECK).
+    - Generar scripts de `INSERT` para poblar la base de datos con datos de prueba.
+    - Desarrollar scripts de `SELECT` para validar que los requerimientos y reglas de negocio se cumplen.
+- **Implementación y Pruebas:** Crear la base de datos y validar que cumple con los requerimientos y reglas definidas.
 
+# Claves
+- **Clave Primaria (Primary Key - PK):** Atributo o conjunto de atributos que identifica de manera única cada registro en una tabla. No puede contener valores nulos y debe ser único.
+- **Clave Foránea (Foreign Key - FK):** Atributo o conjunto de atributos en una tabla que hace referencia a la clave primaria de otra tabla, estableciendo una relación entre ambas.
+- **Clave Candidata:** Atributo o conjunto de atributos que puede identificar de manera única una entidad. Una tabla puede tener múltiples claves candidatas, pero solo una se elige como clave primaria. Las que no sean PK se llaman claves alternas y serán indexadas para optimizar búsquedas.
+- **Índice:** Estructura de datos que mejora la velocidad de las operaciones de consulta en una tabla a costa de espacio adicional y tiempo de mantenimiento durante las operaciones de inserción, actualización y eliminación.
+- **Dominio:** Conjunto de valores permitidos para un atributo, definido por su tipo de dato (por ejemplo, VARCHAR, INT, DATE, etc.) y posibles restricciones (como longitud máxima, formato, etc.).
+- **Normalización:** Proceso de organizar los datos en una base de datos para reducir la redundancia y mejorar la integridad de los datos. Involucra dividir tablas grandes en tablas más pequeñas y definir relaciones entre ellas.
 
+# Relaciones
+- **Relación Uno a Uno (1:1):** Cada registro en la tabla A está asociado con un solo registro en la tabla B, y viceversa. 
+- **Relación Uno a Muchos (1:N):** Un registro en la tabla A puede estar asociado con múltiples registros en la tabla B, pero un registro en la tabla B está asociado con un solo registro en la tabla A. La fk se coloca en la tabla del lado "muchos".
+- **Relación Muchos a Muchos (M:N):** Múltiples registros en la tabla A pueden estar asociados con múltiples registros en la tabla B. Esta relación se implementa mediante una tabla intermedia que contiene claves foráneas de ambas tablas. La tabla intermedia puede tener su propia clave primaria compuesta por las fk o una pk adicional.
